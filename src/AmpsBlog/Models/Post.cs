@@ -25,9 +25,16 @@ namespace AmpsBlog.Models
 
     }
 
+
+    /// <summary>
+    /// Draft = 0
+    /// Published = 1
+    /// Archive = 2
+    /// </summary>
     [Flags]
     public enum PostStatus
     {
+        //You can add more statues but do not change the existing order
         Draft,
         Published,
         Archive
