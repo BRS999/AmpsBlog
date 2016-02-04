@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.AspNet.Identity;
+using AmpsBlog.ViewModels.Admin;
 
 namespace AmpsBlog.Models
 {
@@ -20,6 +21,7 @@ namespace AmpsBlog.Models
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+        
 
         
 
