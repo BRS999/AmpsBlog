@@ -6,16 +6,20 @@ using AmpsBlog.Models;
 using AmpsBlog.ViewModels.Admin;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AmpsBlog.Controllers
 {
     public class UserController : Controller
     {
         private ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
 
-        public UserController(ApplicationDbContext context)
+        public UserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: User
@@ -116,6 +120,19 @@ namespace AmpsBlog.Controllers
                            Photo = u.Photo,
                            Role = r.Name
                        };
+
+            
+            var obj = from r in _context.Roles
+                       select new SelectListItem
+                       {
+                           Text = r.Name,
+                           Value = r.Id,
+                           Selected = (r.Name == user.First().Role) ? true : false
+                       };
+
+
+            ViewBag.StateType = obj.ToList();
+
             if (user == null)
             {
                 return HttpNotFound();
@@ -130,7 +147,17 @@ namespace AmpsBlog.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Update(userViewModel);
+                ApplicationUser user = (from u in _context.Users
+                           where u.Id == userViewModel.UserId
+                           select u).First();
+
+                //_userManager.UpdateAsync(user.First());
+                user.FirstName = userViewModel.FirstName;
+                user.LastName = userViewModel.LastName;
+
+                var roles = _userManager.GetRolesAsync(user);
+
+                _context.Update(user);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }

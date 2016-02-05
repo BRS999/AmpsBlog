@@ -43,11 +43,10 @@
         <div class="form-group">
             <label asp-for="Role" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Role" class="form-control" />
-                <span asp-validation-for="Role" class="text-danger" />
+                <select asp-for="Role" asp-items="ViewBag.StateType" class="form-control"></select>
             </div>
         </div>
-
+        
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
