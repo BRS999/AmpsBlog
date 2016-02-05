@@ -151,11 +151,9 @@ namespace AmpsBlog.Controllers
                            where u.Id == userViewModel.UserId
                            select u).First();
 
-                //_userManager.UpdateAsync(user.First());
                 user.FirstName = userViewModel.FirstName;
                 user.LastName = userViewModel.LastName;
 
-                var roles = _userManager.GetRolesAsync(user);
 
                 _context.Update(user);
                 _context.SaveChanges();
