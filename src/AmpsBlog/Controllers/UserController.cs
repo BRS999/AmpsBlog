@@ -96,8 +96,10 @@ namespace AmpsBlog.Controllers
                            Value = r.Id,
                            Selected = (r.Name == user.First().Role) ? true : false
                        };
+
+
             ViewBag.StateType = obj.ToList();
-            
+
             return View(user.First());
         }
 

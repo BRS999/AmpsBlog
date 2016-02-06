@@ -8,7 +8,6 @@ namespace AmpsBlog.Models
     {
         public Post()
         {
-            Status = PostStatus.Draft;
             DateCreated = DateTime.UtcNow;
         }
 
@@ -18,8 +17,10 @@ namespace AmpsBlog.Models
         [Required]
         public string Content { get; set; }
         public string Tags { get; set; }
-        public PostStatus Status { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public int StatusId { get; set; }
+        public PostStatus PostStatus { get; set; }
 
         public string AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
@@ -30,17 +31,5 @@ namespace AmpsBlog.Models
     }
 
 
-    /// <summary>
-    /// Draft = 0
-    /// Published = 1
-    /// Archive = 2
-    /// </summary>
-    [Flags]
-    public enum PostStatus
-    {
-        //You can add more statues but do not change the existing order
-        Draft,
-        Published,
-        Archive
-    }
+
 }

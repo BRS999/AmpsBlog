@@ -22,6 +22,7 @@ namespace AmpsBlog.Models
         {
             await CreateRoles();
             await CreateUsersAsync();
+            await CreatePostStatuses();
         }
 
         private async Task CreateRoles()
@@ -48,8 +49,20 @@ namespace AmpsBlog.Models
 
                 await _userManager.AddToRoleAsync(seedUser, "Admin");
             }
-
         }
 
+        private async Task CreatePostStatuses()
+        {
+            var postStatus = _context.PostStatuses.Count();
+            if (postStatus == 0)
+            {
+                _context.PostStatuses.AddRange(
+                new PostStatus { Status = "Draft" },
+                new PostStatus { Status = "Publish" },
+                new PostStatus { Status = "Archive" });
+
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AmpsBlog.Models
 {
@@ -17,6 +18,14 @@ namespace AmpsBlog.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         public string Photo { get; set; }
+
+        
+        [NotMapped]
+        public string FullName
+        {
+            get { return this.FirstName + " " + this.LastName; }
+        }
+
     }
 
 }
