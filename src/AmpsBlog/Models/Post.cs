@@ -17,8 +17,10 @@ namespace AmpsBlog.Models
         [Required]
         public string Content { get; set; }
         public string Tags { get; set; }
+        [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; }
-
+        
+        [Display(Name = "Status")]
         public int StatusId { get; set; }
         public PostStatus PostStatus { get; set; }
 

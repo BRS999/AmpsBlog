@@ -44,8 +44,16 @@ namespace AmpsBlog.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
+            var authors = from a in _context.Users
+                          join p in _context.UserRoles
+                          on a.Id equals p.UserId
+                          join r in _context.Roles
+                          on p.RoleId equals r.Id
+                          where r.Name == "Author"
+                          select a;
+
             ViewBag.StatusId = new SelectList(_context.PostStatuses, "Id", "Status");
-            ViewBag.AuthorId = new SelectList(_context.Users, "Id", "FullName");
+            ViewBag.AuthorId = new SelectList(authors, "Id", "FullName");
             ViewBag.BlogId = new SelectList(_context.Blogs, "BlogId", "Name");
             return View();
         }
