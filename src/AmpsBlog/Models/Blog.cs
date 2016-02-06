@@ -18,6 +18,7 @@ namespace AmpsBlog.Models
         [Required]
         public string Url { get; set; }
         public List<Post> Posts { get; set; }
+        [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; }
     }
 }
