@@ -81,6 +81,12 @@ namespace AmpsBlog.Controllers
 
             var user = GetUserViewModel().Where(x=>x.UserId == id);
 
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            //ViewBag for Roles Dropdown list
             var obj = from r in _context.Roles
                        select new SelectListItem
                        {
@@ -88,13 +94,8 @@ namespace AmpsBlog.Controllers
                            Value = r.Id,
                            Selected = (r.Name == user.First().Role) ? true : false
                        };
-
             ViewBag.StateType = obj.ToList();
-
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
+            
             return View(user.First());
         }
 
