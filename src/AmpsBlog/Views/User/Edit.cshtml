@@ -8,7 +8,6 @@
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>UserViewModel</h4>
         <hr />
         <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="UserId" />
@@ -43,7 +42,7 @@
         <div class="form-group">
             <label asp-for="Role" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Role" asp-items="ViewBag.StateType" class="form-control"></select>
+                <select asp-for="RoleId" asp-items="ViewBag.StateType" class="form-control"></select>
             </div>
         </div>
         

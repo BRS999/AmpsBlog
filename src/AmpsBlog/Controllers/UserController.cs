@@ -15,31 +15,19 @@ namespace AmpsBlog.Controllers
     {
         private ApplicationDbContext _context;
         private UserManager<ApplicationUser> _userManager;
+        public RoleManager<IdentityRole> _roleManager { get; set; }
 
-        public UserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public UserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: User
         public IActionResult Index()
         {
-            var query = from u in _context.Users
-                        join ur in _context.UserRoles
-                        on u.Id equals ur.UserId
-                        join r in _context.Roles
-                        on ur.RoleId equals r.Id
-                        select new UserViewModel
-                        {
-                            UserId = u.Id,
-                            FirstName = u.FirstName,
-                            LastName = u.LastName,
-                            Email = u.Email,
-                            Photo = u.Photo,
-                            Role = r.Name
-                        };
-
+            var query = GetUserViewModel();
 
             return View(query.ToList());
         }
@@ -52,21 +40,7 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            var user = from u in _context.Users
-                       join ur in _context.UserRoles
-                       on u.Id equals ur.UserId
-                       join r in _context.Roles
-                       on ur.RoleId equals r.Id
-                       where u.Id == id
-                       select new UserViewModel
-                       {
-                           UserId = u.Id,
-                           FirstName = u.FirstName,
-                           LastName = u.LastName,
-                           Email = u.Email,
-                           Photo = u.Photo,
-                           Role = r.Name
-                       };
+            var user = GetUserViewModel();
 
 
             if (user == null)
@@ -105,23 +79,8 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            var user = from u in _context.Users
-                       join ur in _context.UserRoles
-                       on u.Id equals ur.UserId
-                       join r in _context.Roles
-                       on ur.RoleId equals r.Id
-                       where u.Id == id
-                       select new UserViewModel
-                       {
-                           UserId = u.Id,
-                           FirstName = u.FirstName,
-                           LastName = u.LastName,
-                           Email = u.Email,
-                           Photo = u.Photo,
-                           Role = r.Name
-                       };
+            var user = GetUserViewModel().Where(x=>x.UserId == id);
 
-            
             var obj = from r in _context.Roles
                        select new SelectListItem
                        {
@@ -129,7 +88,6 @@ namespace AmpsBlog.Controllers
                            Value = r.Id,
                            Selected = (r.Name == user.First().Role) ? true : false
                        };
-
 
             ViewBag.StateType = obj.ToList();
 
@@ -143,17 +101,23 @@ namespace AmpsBlog.Controllers
         // POST: User/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(UserViewModel userViewModel)
+        public async Task<IActionResult> Edit(UserViewModel userViewModel)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = (from u in _context.Users
-                           where u.Id == userViewModel.UserId
-                           select u).First();
+                ApplicationUser user = await _userManager.FindByIdAsync(userViewModel.UserId);
 
                 user.FirstName = userViewModel.FirstName;
                 user.LastName = userViewModel.LastName;
+                var existingRole = await _userManager.GetRolesAsync(user);
 
+                if (existingRole[0] != userViewModel.Role)
+                {
+                    var newRole = await _roleManager.FindByIdAsync(userViewModel.RoleId);
+
+                    await _userManager.RemoveFromRoleAsync(user, existingRole[0]);
+                    await _userManager.AddToRoleAsync(user, newRole.Name);
+                }
 
                 _context.Update(user);
                 _context.SaveChanges();
@@ -189,6 +153,27 @@ namespace AmpsBlog.Controllers
             _context.Users.Remove(user);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public IQueryable<UserViewModel> GetUserViewModel()
+        {
+            var query = from u in _context.Users
+                        join ur in _context.UserRoles
+                        on u.Id equals ur.UserId
+                        join r in _context.Roles
+                        on ur.RoleId equals r.Id
+                        select new UserViewModel
+                        {
+                            UserId = u.Id,
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            Email = u.Email,
+                            Photo = u.Photo,
+                            Role = r.Name,
+                            RoleId = r.Id
+                        };
+
+            return query;
         }
     }
 }
