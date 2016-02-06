@@ -64,6 +64,8 @@ namespace AmpsBlog.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+                    
+
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

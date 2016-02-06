@@ -17,10 +17,6 @@ namespace AmpsBlog.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         public string Photo { get; set; }
-
-        public string GetFirstName()
-        {
-            return this.FirstName;
-        }
     }
+
 }
