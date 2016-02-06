@@ -8,9 +8,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Authorization;
 
 namespace AmpsBlog.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private ApplicationDbContext _context;
