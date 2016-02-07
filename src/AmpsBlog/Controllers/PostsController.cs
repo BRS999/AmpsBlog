@@ -5,16 +5,19 @@ using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using AmpsBlog.Models;
 using System;
+using Microsoft.AspNet.Identity;
 
 namespace AmpsBlog.Controllers
 {
     public class PostsController : Controller
     {
         private ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;    
         }
 
         // GET: Posts
@@ -65,6 +68,9 @@ namespace AmpsBlog.Controllers
         {
             if (ModelState.IsValid)
             {
+                var currentuser = _userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+
+                post.AuthorId = currentuser.Id;
                 post.DateCreated = DateTime.UtcNow;
                 _context.Posts.Add(post);
                 await _context.SaveChangesAsync();
@@ -88,8 +94,9 @@ namespace AmpsBlog.Controllers
             {
                 return HttpNotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Author", post.AuthorId);
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "BlogId", "Blog", post.BlogId);
+            
+            ViewBag.BlogId = new SelectList(_context.Blogs, "BlogId", "Name", post.BlogId);
+            ViewBag.StatusId = new SelectList(_context.PostStatuses, "Id", "Status", post.StatusId);
             return View(post);
         }
 
@@ -100,6 +107,9 @@ namespace AmpsBlog.Controllers
         {
             if (ModelState.IsValid)
             {
+                var currentuser = _userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+                post.AuthorId = currentuser.Id;
+
                 _context.Update(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");

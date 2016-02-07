@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AmpsBlog.Models
 {
@@ -8,5 +9,6 @@ namespace AmpsBlog.Models
         public string Status { get; set; }
 
         public List<Post> Posts { get; set; }
+
     }
 }

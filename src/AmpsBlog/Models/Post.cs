@@ -27,6 +27,7 @@ namespace AmpsBlog.Models
         public string AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
 
+        [Display(Name = "Blog")]
         public int BlogId { get; set; }
         public Blog Blog { get; set; }
 
