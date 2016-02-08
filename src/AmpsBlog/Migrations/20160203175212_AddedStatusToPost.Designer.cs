@@ -8,9 +8,10 @@ using AmpsBlog.Models;
 namespace AmpsBlog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160203175212_AddedStatusToPost")]
+    partial class AddedStatusToPost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -30,12 +31,6 @@ namespace AmpsBlog.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
-
-                    b.Property<string>("LastName")
-                        .IsRequired();
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -51,8 +46,6 @@ namespace AmpsBlog.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("Photo");
 
                     b.Property<string>("SecurityStamp");
 
@@ -95,8 +88,6 @@ namespace AmpsBlog.Migrations
                     b.Property<int>("PostId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId");
-
                     b.Property<int>("BlogId");
 
                     b.Property<string>("Content")
@@ -104,26 +95,12 @@ namespace AmpsBlog.Migrations
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<int?>("PostStatusId");
-
-                    b.Property<int>("StatusId");
-
                     b.Property<string>("Tags");
 
                     b.Property<string>("Title")
                         .IsRequired();
 
                     b.HasKey("PostId");
-                });
-
-            modelBuilder.Entity("AmpsBlog.Models.PostStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Status");
-
-                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
@@ -210,17 +187,9 @@ namespace AmpsBlog.Migrations
 
             modelBuilder.Entity("AmpsBlog.Models.Post", b =>
                 {
-                    b.HasOne("AmpsBlog.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
-
                     b.HasOne("AmpsBlog.Models.Blog")
                         .WithMany()
                         .HasForeignKey("BlogId");
-
-                    b.HasOne("AmpsBlog.Models.PostStatus")
-                        .WithMany()
-                        .HasForeignKey("PostStatusId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
