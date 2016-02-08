@@ -11,7 +11,7 @@ namespace AmpsBlog.Models
             DateCreated = DateTime.UtcNow;
         }
 
-        public int BlogId { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }

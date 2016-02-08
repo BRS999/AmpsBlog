@@ -21,14 +21,11 @@ namespace AmpsBlog.Models
         public DateTime DateCreated { get; set; }
         
         [Display(Name = "Status")]
-        public int StatusId { get; set; }
         public PostStatus PostStatus { get; set; }
 
-        public string AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
 
         [Display(Name = "Blog")]
-        public int BlogId { get; set; }
         public Blog Blog { get; set; }
 
     }

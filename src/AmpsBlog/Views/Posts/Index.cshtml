@@ -22,7 +22,7 @@
             @Html.DisplayNameFor(model => model.Author)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StatusId)
+            @Html.DisplayNameFor(model => model.PostStatus)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Tags)
@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.Author.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PostStatus.Status)
+                @Html.DisplayFor(modelItem => item.PostStatus)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Tags)

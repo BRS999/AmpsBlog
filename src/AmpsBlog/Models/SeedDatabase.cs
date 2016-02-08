@@ -44,10 +44,18 @@ namespace AmpsBlog.Models
             var user = _userManager.Users.Count();
             if (user == 0)
             {
-                var seedUser = new ApplicationUser { UserName = "admin@ampsblog.com", Email = "admin@ampsblog.com" };
-                await _userManager.CreateAsync(seedUser, "P@ssw0rd!");
+                try
+                {
+                    var seedUser = new ApplicationUser { UserName = "admin@ampsblog.com", Email = "admin@ampsblog.com", FirstName = "AmpsBlog", LastName = "Admin" };
+                    await _userManager.CreateAsync(seedUser, "P@ssw0rd!");
 
-                await _userManager.AddToRoleAsync(seedUser, "Admin");
+                    await _userManager.AddToRoleAsync(seedUser, "Admin");
+                }
+                catch (Exception ex)
+                {
+
+                    
+                }
             }
         }
 

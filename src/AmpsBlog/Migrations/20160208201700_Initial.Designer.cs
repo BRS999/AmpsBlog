@@ -8,8 +8,8 @@ using AmpsBlog.Models;
 namespace AmpsBlog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160206221326_ModifiedPostTable")]
-    partial class ModifiedPostTable
+    [Migration("20160208201700_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,7 +75,7 @@ namespace AmpsBlog.Migrations
 
             modelBuilder.Entity("AmpsBlog.Models.Blog", b =>
                 {
-                    b.Property<int>("BlogId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("DateCreated");
@@ -88,7 +88,7 @@ namespace AmpsBlog.Migrations
                     b.Property<string>("Url")
                         .IsRequired();
 
-                    b.HasKey("BlogId");
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("AmpsBlog.Models.Post", b =>
@@ -98,7 +98,7 @@ namespace AmpsBlog.Migrations
 
                     b.Property<string>("AuthorId");
 
-                    b.Property<int>("BlogId");
+                    b.Property<int?>("BlogId");
 
                     b.Property<string>("Content")
                         .IsRequired();
@@ -106,8 +106,6 @@ namespace AmpsBlog.Migrations
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<int?>("PostStatusId");
-
-                    b.Property<int>("StatusId");
 
                     b.Property<string>("Tags");
 
