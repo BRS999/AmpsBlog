@@ -22,7 +22,14 @@
         <div class="form-group">
             <label asp-for="Blog" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Blog" asp-items="ViewBag.BlogId" class="form-control"></select>
+                <select asp-for="Blog.Id" asp-items="ViewBag.BlogId" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Permalink" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Permalink" class="form-control" />
+                <span asp-validation-for="Permalink" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

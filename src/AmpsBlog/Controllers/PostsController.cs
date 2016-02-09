@@ -57,7 +57,7 @@ namespace AmpsBlog.Controllers
 
             ViewBag.PostStatus = new SelectList(_context.PostStatuses, "Id", "Status");
             ViewBag.AuthorId = new SelectList(authors, "Id", "FullName");
-            ViewBag.BlogId = new SelectList(_context.Blogs, "BlogId", "Name");
+            ViewBag.BlogId = new SelectList(_context.Blogs, "Id", "Name");
             return View();
         }
 
@@ -68,17 +68,15 @@ namespace AmpsBlog.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentuser = _userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-
-                
-                //post.AuthorId = currentuser.Id;
+                post.Author = _userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
                 post.DateCreated = DateTime.UtcNow;
+
                 _context.Posts.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            //ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Author", post.AuthorId);
-            //ViewData["BlogId"] = new SelectList(_context.Blogs, "BlogId", "Blog", post.BlogId);
+            ViewBag.PostStatus = new SelectList(_context.PostStatuses, "Id", "Status");
+            ViewBag.BlogId = new SelectList(_context.Blogs, "Id", "Name");
             return View(post);
         }
 

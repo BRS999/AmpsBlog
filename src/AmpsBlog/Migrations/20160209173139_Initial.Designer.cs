@@ -8,7 +8,7 @@ using AmpsBlog.Models;
 namespace AmpsBlog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160208201700_Initial")]
+    [Migration("20160209173139_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,9 +85,6 @@ namespace AmpsBlog.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("Url")
-                        .IsRequired();
-
                     b.HasKey("Id");
                 });
 
@@ -104,6 +101,9 @@ namespace AmpsBlog.Migrations
                         .IsRequired();
 
                     b.Property<DateTime>("DateCreated");
+
+                    b.Property<string>("Permalink")
+                        .IsRequired();
 
                     b.Property<int?>("PostStatusId");
 
