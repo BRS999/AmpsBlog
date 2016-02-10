@@ -6,6 +6,8 @@ using Microsoft.Data.Entity;
 using AmpsBlog.Models;
 using System;
 using Microsoft.AspNet.Identity;
+using AmpsBlog.ViewModels.Post;
+using Microsoft.AspNet.Authorization;
 
 namespace AmpsBlog.Controllers
 {
@@ -35,7 +37,7 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Post post = await _context.Posts.SingleAsync(m => m.PostId == id);
+            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).SingleAsync(m => m.PostId == id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -45,6 +47,7 @@ namespace AmpsBlog.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize(Roles = "Author")]
         public IActionResult Create()
         {
             var authors = from a in _context.Users
@@ -64,12 +67,24 @@ namespace AmpsBlog.Controllers
         // POST: Posts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Post post)
+        public async Task<IActionResult> Create(CreatePostViewModel model)
         {
+            //var errors = ModelState.Values.SelectMany(v => v.Errors);
+
             if (ModelState.IsValid)
             {
-                post.Author = _userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-                post.DateCreated = DateTime.UtcNow;
+                Post post = new Post
+                {
+                    Title = model.Title,
+                    Content = model.Content,
+                    Permalink = model.Permalink,
+                    Tags = model.Tags,
+                    DateCreated = DateTime.UtcNow,
+                    Author = _userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name),
+                    Blog = _context.Blogs.Where(x => x.Id == model.Blog).SingleOrDefault(),
+                    PostStatus = _context.PostStatuses.Where(x => x.Id == model.PostStatus).SingleOrDefault()
+                };
+                
 
                 _context.Posts.Add(post);
                 await _context.SaveChangesAsync();
@@ -77,7 +92,7 @@ namespace AmpsBlog.Controllers
             }
             ViewBag.PostStatus = new SelectList(_context.PostStatuses, "Id", "Status");
             ViewBag.BlogId = new SelectList(_context.Blogs, "Id", "Name");
-            return View(post);
+            return View(model);
         }
 
         // GET: Posts/Edit/5
@@ -88,14 +103,15 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Post post = await _context.Posts.SingleAsync(m => m.PostId == id);
+            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Blog).SingleAsync(m => m.PostId == id);
             if (post == null)
             {
                 return HttpNotFound();
             }
-            
-            //ViewBag.BlogId = new SelectList(_context.Blogs, "BlogId", "Name", post.BlogId);
-            //ViewBag.StatusId = new SelectList(_context.PostStatuses, "Id", "Status", post.StatusId);
+
+            ViewBag.PostStatus = new SelectList(_context.PostStatuses, "Id", "Status", post.PostStatus.Id);
+            ViewBag.BlogId = new SelectList(_context.Blogs, "Id", "Name", post.Blog.Id);
+
             return View(post);
         }
 
