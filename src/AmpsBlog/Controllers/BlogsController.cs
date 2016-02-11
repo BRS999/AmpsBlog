@@ -32,7 +32,7 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Blog blog = await _context.Blogs.SingleAsync(m => m.BlogId == id);
+            Blog blog = await _context.Blogs.SingleAsync(m => m.Id == id);
             if (blog == null)
             {
                 return HttpNotFound();
@@ -73,7 +73,7 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Blog blog = await _context.Blogs.SingleAsync(m => m.BlogId == id);
+            Blog blog = await _context.Blogs.SingleAsync(m => m.Id == id);
             if (blog == null)
             {
                 return HttpNotFound();
@@ -106,7 +106,7 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Blog blog = await _context.Blogs.SingleAsync(m => m.BlogId == id);
+            Blog blog = await _context.Blogs.SingleAsync(m => m.Id == id);
             if (blog == null)
             {
                 return HttpNotFound();
@@ -121,7 +121,7 @@ namespace AmpsBlog.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Blog blog = await _context.Blogs.SingleAsync(m => m.BlogId == id);
+            Blog blog = await _context.Blogs.SingleAsync(m => m.Id == id);
             _context.Blogs.Remove(blog);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");

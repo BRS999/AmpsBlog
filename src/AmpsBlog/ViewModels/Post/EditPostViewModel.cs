@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace AmpsBlog.Models
+namespace AmpsBlog.ViewModels.Post
 {
-    public class Post
+    public class EditPostViewModel
     {
-        public Post()
-        {
-            DateCreated = DateTime.UtcNow;
-        }
-
         public int PostId { get; set; }
         [Required]
         public string Title { get; set; }
@@ -21,17 +18,13 @@ namespace AmpsBlog.Models
         public string Tags { get; set; }
         [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; }
-        
-        [Display(Name = "Status")]
-        public PostStatus PostStatus { get; set; }
 
-        public ApplicationUser Author { get; set; }
+        [Display(Name = "Status")]
+        public int PostStatus { get; set; }
+
+        public string Author { get; set; }
 
         [Display(Name = "Blog")]
-        public Blog Blog { get; set; }
-
+        public int Blog { get; set; }
     }
-
-
-
 }
