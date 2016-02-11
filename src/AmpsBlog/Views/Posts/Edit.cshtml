@@ -1,4 +1,4 @@
-@model AmpsBlog.Models.Post
+@model AmpsBlog.ViewModels.Post.EditPostViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -45,7 +45,7 @@
         <div class="form-group">
             <label asp-for="Blog" class="control-label col-md-2"></label>
             <div class="col-md-10">
-                <select asp-for="Blog.Id" asp-items="ViewBag.BlogId" class="form-control" disabled="true"></select>
+                <select asp-for="Blog" asp-items="ViewBag.BlogId" class="form-control"></select>
                 <span asp-validation-for="Blog" class="text-danger" />
             </div>
         </div>
@@ -53,7 +53,7 @@
         <div class="form-group">
             <label asp-for="PostStatus" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="PostStatus.Id" asp-items="ViewBag.PostStatus" class="form-control"></select>
+                <select asp-for="PostStatus" asp-items="ViewBag.PostStatus" class="form-control"></select>
                 
                 <span asp-validation-for="PostStatus" class="text-danger" />
             </div>

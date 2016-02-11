@@ -96,6 +96,7 @@ namespace AmpsBlog.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize(Roles = "Author")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -109,29 +110,52 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
+            EditPostViewModel editPost = new EditPostViewModel
+            {
+                Title = post.Title,
+                Content = post.Content,
+                Permalink = post.Permalink,
+                DateCreated = post.DateCreated,
+                Tags = post.Tags,
+                Blog = post.Blog.Id,
+                PostId = post.PostId,
+                Author = post.Author.Id,
+                PostStatus = post.PostStatus.Id
+            };
+
             ViewBag.PostStatus = new SelectList(_context.PostStatuses, "Id", "Status", post.PostStatus.Id);
             ViewBag.BlogId = new SelectList(_context.Blogs, "Id", "Name", post.Blog.Id);
 
-            return View(post);
+            return View(editPost);
         }
 
         // POST: Posts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Post post)
+        public async Task<IActionResult> Edit(EditPostViewModel editPost)
         {
             if (ModelState.IsValid)
             {
                 var currentuser = _userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-                //post.Author = currentuser.Id;
+                Post post = new Post {
+                    PostId = editPost.PostId,
+                    Title = editPost.Title,
+                    Content = editPost.Content,
+                    Permalink = editPost.Permalink,
+                    DateCreated = editPost.DateCreated,
+                    Tags = editPost.Tags,
+                    Author = currentuser,
+                    Blog = _context.Blogs.First(x=>x.Id == editPost.Blog),
+                    PostStatus = _context.PostStatuses.First(x=>x.Id == editPost.PostStatus)
+                };
 
                 _context.Update(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            //ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Author", post.AuthorId);
-            //ViewData["BlogId"] = new SelectList(_context.Blogs, "BlogId", "Blog", post.BlogId);
-            return View(post);
+            ViewBag.PostStatus = new SelectList(_context.PostStatuses, "Id", "Status", editPost.PostStatus);
+            ViewBag.BlogId = new SelectList(_context.Blogs, "Id", "Name", editPost.Blog);
+            return View(editPost);
         }
 
         // GET: Posts/Delete/5
