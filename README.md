@@ -9,3 +9,5 @@ As of today AmpsBlog is running on the Core Clr RC1 release. The intention is fo
 <li>ASP.NET Identity is used for user registration and management.</li>
 <li>SQL Server is used in the backend for storing all blogs, posts and user information.</li>
 </ul>
+
+Join the discussion on slack... http://ampsblog.slack.com
