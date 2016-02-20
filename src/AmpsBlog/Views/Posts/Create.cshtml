@@ -4,70 +4,87 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<a asp-action="Index">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span>Posts</span>
+</a>
+<h4>Create a New Post</h4>
+
 
 <form asp-action="Create">
-    <div class="form-horizontal">
-        <h4>Post</h4>
-        <hr />
-        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-        
-        <div class="form-group">
-            <label asp-for="Title" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger" />
-            </div>
+    <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" placeholder="Enter a Post Title" />
+        <span asp-validation-for="Title" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Content" class="control-label"></label>
+        <div class="editable" style="min-height:250px;"></div>
+        <input type="hidden" asp-for="Content" class="form-control" />
+        <span asp-validation-for="Content" class="text-danger" />
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label asp-for="Blog" class="control-label"></label>
+            <select asp-for="Blog" asp-items="ViewBag.BlogId" class="form-control"></select>
+            <span asp-validation-for="Blog" class="text-danger" />
         </div>
-        <div class="form-group">
-            <label asp-for="Blog" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="Blog" asp-items="ViewBag.BlogId" class="form-control"></select>
-                <span asp-validation-for="Blog" class="text-danger" />
-            </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Permalink" class="control-label"></label>
+            <input asp-for="Permalink" id="permalink" class="form-control" />
+            <span asp-validation-for="Permalink" class="text-danger" />
         </div>
-        <div class="form-group">
-            <label asp-for="Permalink" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Permalink" class="form-control" />
-                <span asp-validation-for="Permalink" class="text-danger" />
-            </div>
+        <div class="form-group col-md-3">
+            <label asp-for="Tags" class="control-label"></label>
+            <input asp-for="Tags" class="form-control" />
+            <span asp-validation-for="Tags" class="text-danger" />
         </div>
-        <div class="form-group">
-            <label asp-for="Content" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Content" class="form-control" />
-                <span asp-validation-for="Content" class="text-danger" />
-            </div>
+        <div class="form-group col-md-3">
+            <label asp-for="PostStatus" class="control-label"></label>
+            <select asp-for="PostStatus" asp-items="ViewBag.PostStatus" class="form-control"></select>
         </div>
-        <div class="form-group">
-            <label asp-for="PostStatus" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="PostStatus" asp-items="ViewBag.PostStatus" class="form-control"></select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Tags" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Tags" class="form-control" />
-                <span asp-validation-for="Tags" class="text-danger" />
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+    </div>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-12">
+            <input type="submit" value="Create" class="btn btn-default" />
         </div>
     </div>
 </form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    
+    <script src="~/lib/medium-editor/dist/js/medium-editor.min.js"></script>
+    <link rel="stylesheet" href="~/lib/medium-editor/dist/css/medium-editor.min.css" />
+    <script>var editor = new MediumEditor('.editable');</script>
+
+    <script>
+        $(".editable").focusout(function () {
+            var blog = $('.editable').html();
+            $('#Content').val(blog);
+        });
+        $("#Title").change(function () {
+            var title = $("#Title").val().trim().replace(/[^\w\s]/gi, '').split(" ");
+
+            var perma = "";
+            for (var s in title) {
+                perma += title[s];
+                if (s != title.length - 1)
+                    perma += "-";
+            }
+
+            $("#permalink").val(perma);
+        });
+    </script>
 }

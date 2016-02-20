@@ -42,7 +42,8 @@ namespace AmpsBlog.Controllers
             {
                 return HttpNotFound();
             }
-
+            var date = post.DateCreated.ToLocalTime();
+            post.DateCreated = date;
             return View(post);
         }
 

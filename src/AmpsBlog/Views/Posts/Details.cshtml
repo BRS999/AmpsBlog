@@ -4,53 +4,20 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>Post</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        
-        <dt>
-            @Html.DisplayNameFor(model => model.Author.FullName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Author.FullName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PostStatus)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PostStatus.Status)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Tags)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Tags)
-        </dd>
-        
-    </dl>
+    <h1>@Html.DisplayFor(model => model.Title)</h1>
+    @Html.DisplayFor(model => model.Author.FullName)
+    @Html.DisplayFor(model => model.DateCreated)
+    <hr>
+    <div>
+        @{ var myHtmlString = new HtmlString(Model.Content);}
+        @myHtmlString
+    </div>
+    <hr>
+    @Html.DisplayFor(model => model.PostStatus.Status)
+    @Html.DisplayFor(model => model.Tags)
 </div>
+
 <p>
     
     
