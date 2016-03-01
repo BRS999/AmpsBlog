@@ -4,8 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
-
 <p>
     @if(User.IsInRole("Author"))
     {
@@ -13,56 +11,18 @@
     }
 
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Author)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PostStatus)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Tags)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </th>
-        <th></th>
-    </tr>
+@foreach (var item in Model)
+{
+<div>
+    <h1><a asp-action="Details" asp-route-id="@item.PostId">@Html.DisplayFor(modelItem => item.Title)</a></h1>
+    <h4>@Html.DisplayFor(modelItem => item.Author.FullName)</h4>
+    <h4>@Html.DisplayFor(modelItem => item.DateCreated)</h4>
+    <p>@Html.DisplayFor(modelItem => item.Content)</p>
+    <div>
+        @{ var myHtmlString = new HtmlString(item.Content);}
+        @myHtmlString
+    </div>
+</div>
+<hr>
+}
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.PostId">@Html.DisplayFor(modelItem => item.Title)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostStatus.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tags)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-
-            <td>
-                @if (User.Identity.Name == item.Author.Email || User.IsInRole("Admin"))
-                {
-                    if (User.Identity.Name == item.Author.Email)
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.PostId">Edit</a> <span>|</span>
-                    }
-
-                    <a asp-action="Delete" asp-route-id="@item.PostId">Delete</a>
-                }
-            </td>
-        </tr>
-    }
-</table>

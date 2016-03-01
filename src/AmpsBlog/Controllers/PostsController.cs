@@ -22,6 +22,14 @@ namespace AmpsBlog.Controllers
             _userManager = userManager;    
         }
 
+        // GET: Posts/List
+        [Authorize(Roles = "Author")]
+        public async Task<IActionResult> List()
+        {
+            var applicationDbContext = _context.Posts.Include(p => p.Author).Include(p => p.Blog).Include(p => p.PostStatus);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
         // GET: Posts
         public async Task<IActionResult> Index()
         {
