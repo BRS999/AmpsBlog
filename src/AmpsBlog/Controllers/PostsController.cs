@@ -37,7 +37,8 @@ namespace AmpsBlog.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Posts/Details/5
+        // GET: Posts/id/5
+        [Route("Posts/id/{id?}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,6 +47,24 @@ namespace AmpsBlog.Controllers
             }
 
             Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).SingleAsync(m => m.PostId == id);
+            if (post == null)
+            {
+                return HttpNotFound();
+            }
+            var date = post.DateCreated.ToLocalTime();
+            post.DateCreated = date;
+            return View(post);
+        }
+
+        [Route("Posts/{perma}")]
+        public async Task<IActionResult> Details(string perma)
+        {
+            if (perma == null)
+            {
+                return HttpNotFound();
+            }
+
+            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).SingleAsync(m => m.Permalink == perma);
             if (post == null)
             {
                 return HttpNotFound();
