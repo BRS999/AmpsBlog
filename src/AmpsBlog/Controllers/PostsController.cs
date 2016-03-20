@@ -24,6 +24,7 @@ namespace AmpsBlog.Controllers
 
         // GET: Posts/List
         [Authorize(Roles = "Author")]
+        [Route("Posts/List")]
         public async Task<IActionResult> List()
         {
             var applicationDbContext = _context.Posts.Include(p => p.Author).Include(p => p.Blog).Include(p => p.PostStatus);
