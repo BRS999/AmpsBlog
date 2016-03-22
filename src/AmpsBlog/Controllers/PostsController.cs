@@ -34,7 +34,7 @@ namespace AmpsBlog.Controllers
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Posts.Include(p => p.Author).Include(p => p.Blog).Include(p => p.PostStatus);
+            var applicationDbContext = _context.Posts.Include(p => p.Author).Include(p => p.Blog).Include(p => p.PostStatus).Where(x=>x.PostStatus.Id == 2);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -133,7 +133,7 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Blog).SingleAsync(m => m.PostId == id);
+            Post post = await _context.Posts.Include(a => a.Author).Include(p => p.PostStatus).Include(p => p.Blog).SingleAsync(m => m.PostId == id);
             if (post == null)
             {
                 return HttpNotFound();
