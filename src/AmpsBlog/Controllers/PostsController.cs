@@ -47,7 +47,7 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).SingleAsync(m => m.PostId == id);
+            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).FirstOrDefaultAsync(m => m.PostId == id);
             if (post == null)
             {
                 return HttpNotFound();
