@@ -57,7 +57,7 @@ namespace AmpsBlog.Controllers
             return View(post);
         }
 
-        [Route("Posts/{perma}")]
+        [Route("Posts/blog/{perma}")]
         public async Task<IActionResult> Details(string perma)
         {
             if (perma == null)
@@ -65,7 +65,7 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).SingleAsync(m => m.Permalink == perma);
+            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).FirstOrDefaultAsync(m => m.Permalink == perma);
             if (post == null)
             {
                 return HttpNotFound();
