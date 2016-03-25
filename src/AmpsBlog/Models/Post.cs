@@ -20,6 +20,7 @@ namespace AmpsBlog.Models
         public string Content { get; set; }
         public string Tags { get; set; }
         [Display(Name = "Date Created")]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime DateCreated { get; set; }
         
         [Display(Name = "Status")]

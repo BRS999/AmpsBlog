@@ -22,14 +22,24 @@ namespace AmpsBlog.Controllers
             _userManager = userManager;    
         }
 
-        // GET: Posts
-        public async Task<IActionResult> Index()
+        // GET: Posts/List
+        [Authorize(Roles = "Author")]
+        [Route("Posts/List")]
+        public async Task<IActionResult> List()
         {
             var applicationDbContext = _context.Posts.Include(p => p.Author).Include(p => p.Blog).Include(p => p.PostStatus);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Posts/Details/5
+        // GET: Posts
+        public async Task<IActionResult> Index()
+        {
+            var applicationDbContext = _context.Posts.Include(p => p.Author).Include(p => p.Blog).Include(p => p.PostStatus).Where(x=>x.PostStatus.Id == 2);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        // GET: Posts/id/5
+        [Route("Posts/id/{id?}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,12 +47,31 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).SingleAsync(m => m.PostId == id);
+            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).FirstOrDefaultAsync(m => m.PostId == id);
             if (post == null)
             {
                 return HttpNotFound();
             }
+            var date = post.DateCreated.ToLocalTime();
+            post.DateCreated = date;
+            return View(post);
+        }
 
+        [Route("Posts/blog/{perma}")]
+        public async Task<IActionResult> Details(string perma)
+        {
+            if (perma == null)
+            {
+                return HttpNotFound();
+            }
+
+            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Author).FirstOrDefaultAsync(m => m.Permalink == perma);
+            if (post == null)
+            {
+                return HttpNotFound();
+            }
+            var date = post.DateCreated.ToLocalTime();
+            post.DateCreated = date;
             return View(post);
         }
 
@@ -104,7 +133,7 @@ namespace AmpsBlog.Controllers
                 return HttpNotFound();
             }
 
-            Post post = await _context.Posts.Include(p => p.PostStatus).Include(p => p.Blog).SingleAsync(m => m.PostId == id);
+            Post post = await _context.Posts.Include(a => a.Author).Include(p => p.PostStatus).Include(p => p.Blog).SingleAsync(m => m.PostId == id);
             if (post == null)
             {
                 return HttpNotFound();
