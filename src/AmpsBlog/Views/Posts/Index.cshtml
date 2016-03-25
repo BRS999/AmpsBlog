@@ -15,8 +15,9 @@
 {
 <div>
     <h1><a asp-action="Details" asp-route-id="@item.PostId">@Html.DisplayFor(modelItem => item.Title)</a></h1>
-    <h4>@Html.DisplayFor(modelItem => item.Author.FullName)</h4>
-    <h4>@Html.DisplayFor(modelItem => item.DateCreated)</h4>
+    <h4>by @Html.DisplayFor(modelItem => item.Author.FullName) |
+    @{ var date = item.DateCreated.ToString("dd MMM yyyy"); }
+    @date</h4>
     <p>@Html.DisplayFor(modelItem => item.Content)</p>
     <div>
         @{ var myHtmlString = new HtmlString(item.Content);}
