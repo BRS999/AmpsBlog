@@ -4,19 +4,25 @@
     ViewData["Title"] = "Index";
 }
 
-<br/>
+<br />
 
 @if (User.IsInRole("Author"))
 {
     <div class="text-right">
-        <a class="btn btn-default" asp-action="Create">Create New</a>
-        <a class="btn btn-default" asp-action="List">List View</a>
+        <a class="btn btn-default" asp-action="Create">
+            <span class="glyphicon glyphicon-pencil"></span>
+            <span>Create New Post</span>
+        </a>
+        <a class="btn btn-default" asp-action="List">
+            <span class="glyphicon glyphicon-th-list"></span>
+            <span>List View</span>
+        </a>
     </div>
 }
 
 @foreach (var item in Model)
 {
-    
+
     <div>
         <h1><a asp-action="Details" asp-route-id="@item.PostId">@Html.DisplayFor(modelItem => item.Title)</a></h1>
         <h4>
@@ -24,7 +30,7 @@
             @{ var date = item.DateCreated.ToString("dd MMM yyyy"); }
             @date
         </h4>
-        
+
         <div>
             @{ var myHtmlString = new HtmlString(item.Content);}
             @myHtmlString
