@@ -4,9 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
+<br/>
+
 @if (User.IsInRole("Author"))
 {
-    <div>
+    <div class="text-right">
         <a class="btn btn-default" asp-action="Create">Create New</a>
         <a class="btn btn-default" asp-action="List">List View</a>
     </div>
