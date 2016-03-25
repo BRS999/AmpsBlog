@@ -4,26 +4,33 @@
     ViewData["Title"] = "Index";
 }
 
-<p>
-    @if(User.IsInRole("Author"))
-    {
-        <a asp-action="Create">Create New</a>
-    }
-
-</p>
-@foreach (var item in Model)
+@if (User.IsInRole("Author"))
 {
-<div>
-    <h1><a asp-action="Details" asp-route-id="@item.PostId">@Html.DisplayFor(modelItem => item.Title)</a></h1>
-    <h4>by @Html.DisplayFor(modelItem => item.Author.FullName) |
-    @{ var date = item.DateCreated.ToString("dd MMM yyyy"); }
-    @date</h4>
-    <p>@Html.DisplayFor(modelItem => item.Content)</p>
     <div>
-        @{ var myHtmlString = new HtmlString(item.Content);}
-        @myHtmlString
+        <a class="btn btn-default" asp-action="Create">Create New</a>
+        <a class="btn btn-default" asp-action="List">List View</a>
     </div>
-</div>
-<hr>
 }
 
+@foreach (var item in Model)
+{
+    
+    <div>
+        <h1><a asp-action="Details" asp-route-id="@item.PostId">@Html.DisplayFor(modelItem => item.Title)</a></h1>
+        <h4>
+            by @Html.DisplayFor(modelItem => item.Author.FullName) |
+            @{ var date = item.DateCreated.ToString("dd MMM yyyy"); }
+            @date
+        </h4>
+        
+        <div>
+            @{ var myHtmlString = new HtmlString(item.Content);}
+            @myHtmlString
+        </div>
+    </div>
+    @if (item != Model.Last())
+    {
+        <hr>
+    }
+
+                }
