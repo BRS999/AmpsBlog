@@ -45,11 +45,17 @@ namespace AmpsBlog
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
+            
+            //Uncomment below for using SQL Server 
+            //services.AddEntityFramework()
+            //    .AddSqlServer()
+            //    .AddDbContext<ApplicationDbContext>(options =>
+            //        options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
             services.AddEntityFramework()
-                .AddSqlServer()
+                .AddSqlite()
                 .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+                    options.UseSqlite(Configuration["Data:DefaultConnection:ConnectionString"]));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
